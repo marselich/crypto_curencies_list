@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "305388884169",
+    "project_id": "crypto-currencies-list",
+    "storage_bucket": "crypto-currencies-list.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:305388884169:android:63d7f58a37ee2c7ae9bd18",
+        "android_client_info": {
+          "package_name": "com.example.crypto_curencies_list"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "305388884169-mmmp88q24s7i06jidgim27nbtqi60u68.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDeLQM0Upv9O6G3BtJs-CIFGD8fjDYBnkM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "305388884169-mmmp88q24s7i06jidgim27nbtqi60u68.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
