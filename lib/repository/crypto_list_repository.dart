@@ -33,12 +33,12 @@ class CryptoListRepository implements AbstractCryptoListRepository {
   }
 
   @override
-  Future<List<CryptoCoinModel>> getCoinList() async {
+  Future<List<CryptoCoinModel>> getCoinList(int pageNumber) async {
     List<CryptoCoinModel> coinList = [];
 
     try {
       final response = await dio.get(
-          "https://min-api.cryptocompare.com/data/top/totalvolfull?limit=10&tsym=USD");
+          "https://min-api.cryptocompare.com/data/top/totalvolfull?limit=10&page=$pageNumber&tsym=USD");
 
       final data = response.data["Data"] as List<dynamic>;
 

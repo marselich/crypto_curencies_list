@@ -3,6 +3,7 @@ part of "crypto_list_bloc.dart";
 abstract class CryptoListState extends Equatable {}
 
 class CryptoListInitial extends CryptoListState {
+  static int pageNumber = 0;
   @override
   List<Object?> get props => [];
 }
@@ -18,7 +19,7 @@ class CryptoListLoaded extends CryptoListState {
   CryptoListLoaded({required this.cryptoList});
 
   @override
-  List<Object?> get props => [cryptoList];
+  List<Object?> get props => [cryptoList, cryptoList.length];
 }
 
 class CryptoListLoadingFailure extends CryptoListState {

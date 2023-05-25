@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:auto_route/auto_route.dart';
 import 'package:crypto_curencies_list/features/crypto_list/bloc/crypto_list_bloc.dart';
 import 'package:crypto_curencies_list/features/crypto_list/widgets/widgets.dart';
@@ -7,6 +5,7 @@ import 'package:crypto_curencies_list/repository/abstract_crypto_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 @RoutePage()
 class CryptoListScreen extends StatefulWidget {
@@ -18,12 +17,16 @@ class CryptoListScreen extends StatefulWidget {
 
 class _CryptoListScreenState extends State<CryptoListScreen> {
   final _getit = GetIt.I.get<AbstractCryptoListRepository>();
-  late final _bloc;
+  late final CryptoListBloc _bloc;
+  late final RefreshController _refreshController;
+  int _pageNumber = 1;
 
   @override
   void initState() {
     _bloc = CryptoListBloc(_getit);
     _bloc.add(LoadCryptoList());
+
+    _refreshController = RefreshController();
     super.initState();
   }
 
@@ -38,11 +41,25 @@ class _CryptoListScreenState extends State<CryptoListScreen> {
           bloc: _bloc,
           builder: (context, state) {
             if (state is CryptoListLoaded) {
-              return RefreshIndicator(
-                onRefresh: () async {
-                  final completer = Completer();
-                  _bloc.add(LoadCryptoList(completer: completer));
-                  return completer.future;
+              return SmartRefresher(
+                onRefresh: () {
+                  _bloc.add(
+                      LoadCryptoList(refreshController: _refreshController));
+                  _pageNumber = 1;
+                },
+                controller: _refreshController,
+                physics: const BouncingScrollPhysics(),
+                enablePullUp: true,
+                enablePullDown: true,
+                onLoading: () async {
+                  _bloc.add(LoadPageCryptoList(
+                    cryptoList: state.cryptoList,
+                    pageNumber: _pageNumber,
+                    refreshController: _refreshController,
+                  ));
+                  // if (mounted) setState(() {});
+
+                  _pageNumber++;
                 },
                 child: ListView.separated(
                   separatorBuilder: (context, i) => const Divider(),
