@@ -24,9 +24,8 @@ class _CryptoListScreenState extends State<CryptoListScreen> {
   @override
   void initState() {
     _bloc = CryptoListBloc(_getit);
-    _bloc.add(LoadCryptoList());
+    _bloc.add(const LoadCryptoList());
 
-    _refreshController = RefreshController();
     super.initState();
   }
 
@@ -40,41 +39,37 @@ class _CryptoListScreenState extends State<CryptoListScreen> {
       body: BlocBuilder<CryptoListBloc, CryptoListState>(
           bloc: _bloc,
           builder: (context, state) {
-            if (state is CryptoListLoaded) {
+            return state.maybeMap(loaded: (value) {
               return SmartRefresher(
                 onRefresh: () {
-                  _bloc.add(
-                      LoadCryptoList(refreshController: _refreshController));
+                  _bloc.add(const LoadCryptoList());
                   _pageNumber = 1;
                 },
-                controller: _refreshController,
+                controller: _bloc.refreshController,
                 physics: const BouncingScrollPhysics(),
                 enablePullUp: true,
                 enablePullDown: true,
                 onLoading: () async {
                   _bloc.add(LoadPageCryptoList(
-                    cryptoList: state.cryptoList,
+                    cryptoList: value.cryptoList,
                     pageNumber: _pageNumber,
-                    refreshController: _refreshController,
                   ));
-                  // if (mounted) setState(() {});
 
                   _pageNumber++;
                 },
                 child: ListView.separated(
                   separatorBuilder: (context, i) => const Divider(),
-                  itemCount: state.cryptoList.length,
+                  itemCount: value.cryptoList.length,
                   itemBuilder: (context, i) {
                     return CryptoListTile(
-                      name: state.cryptoList[i].name,
-                      imageUrl: state.cryptoList[i].details.fullImageUrl,
-                      price: state.cryptoList[i].details.price,
+                      name: value.cryptoList[i].name,
+                      imageUrl: value.cryptoList[i].details.fullImageUrl,
+                      price: value.cryptoList[i].details.price,
                     );
                   },
                 ),
               );
-            }
-            if (state is CryptoListLoadingFailure) {
+            }, loadingFailure: (failure) {
               return Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -91,16 +86,17 @@ class _CryptoListScreenState extends State<CryptoListScreen> {
                       height: 20,
                     ),
                     TextButton(
-                      onPressed: () => _bloc.add(LoadCryptoList()),
+                      onPressed: () => _bloc.add(const LoadCryptoList()),
                       child: const Text("Try again"),
                     ),
                   ],
                 ),
               );
-            }
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+            }, orElse: () {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            });
           }),
     );
   }

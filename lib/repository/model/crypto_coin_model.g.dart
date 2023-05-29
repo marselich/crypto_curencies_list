@@ -16,20 +16,12 @@ class CryptoCoinModelAdapter extends TypeAdapter<CryptoCoinModel> {
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return CryptoCoinModel(
-      name: fields[0] as String,
-      details: fields[1] as CryptoCoinDetailModel,
-    );
+    return CryptoCoinModel();
   }
 
   @override
   void write(BinaryWriter writer, CryptoCoinModel obj) {
-    writer
-      ..writeByte(2)
-      ..writeByte(0)
-      ..write(obj.name)
-      ..writeByte(1)
-      ..write(obj.details);
+    writer.writeByte(0);
   }
 
   @override
@@ -42,3 +34,22 @@ class CryptoCoinModelAdapter extends TypeAdapter<CryptoCoinModel> {
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+_$_CryptoCoinModel _$$_CryptoCoinModelFromJson(Map<String, dynamic> json) =>
+    _$_CryptoCoinModel(
+      name: json['name'] as String? ?? "",
+      details: json['details'] == null
+          ? const CryptoCoinDetailModel()
+          : CryptoCoinDetailModel.fromJson(
+              json['details'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$$_CryptoCoinModelToJson(_$_CryptoCoinModel instance) =>
+    <String, dynamic>{
+      'name': instance.name,
+      'details': instance.details,
+    };

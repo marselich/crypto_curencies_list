@@ -16,26 +16,12 @@ class CryptoCoinDetailModelAdapter extends TypeAdapter<CryptoCoinDetailModel> {
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return CryptoCoinDetailModel(
-      price: fields[0] as String,
-      imageUrl: fields[2] as String,
-      high24Hour: fields[3] as String,
-      low24Hour: fields[5] as String,
-    );
+    return CryptoCoinDetailModel();
   }
 
   @override
   void write(BinaryWriter writer, CryptoCoinDetailModel obj) {
-    writer
-      ..writeByte(4)
-      ..writeByte(0)
-      ..write(obj.price)
-      ..writeByte(2)
-      ..write(obj.imageUrl)
-      ..writeByte(3)
-      ..write(obj.high24Hour)
-      ..writeByte(5)
-      ..write(obj.low24Hour);
+    writer.writeByte(0);
   }
 
   @override
@@ -53,17 +39,17 @@ class CryptoCoinDetailModelAdapter extends TypeAdapter<CryptoCoinDetailModel> {
 // JsonSerializableGenerator
 // **************************************************************************
 
-CryptoCoinDetailModel _$CryptoCoinDetailModelFromJson(
+_$_CryptoCoinDetailModel _$$_CryptoCoinDetailModelFromJson(
         Map<String, dynamic> json) =>
-    CryptoCoinDetailModel(
-      price: json['PRICE'] as String,
-      imageUrl: json['IMAGEURL'] as String,
-      high24Hour: json['HIGH24HOUR'] as String,
-      low24Hour: json['LOW24HOUR'] as String,
+    _$_CryptoCoinDetailModel(
+      price: json['PRICE'] ?? "",
+      imageUrl: json['IMAGEURL'] ?? "",
+      high24Hour: json['HIGH24HOUR'] ?? "",
+      low24Hour: json['LOW24HOUR'] ?? "",
     );
 
-Map<String, dynamic> _$CryptoCoinDetailModelToJson(
-        CryptoCoinDetailModel instance) =>
+Map<String, dynamic> _$$_CryptoCoinDetailModelToJson(
+        _$_CryptoCoinDetailModel instance) =>
     <String, dynamic>{
       'PRICE': instance.price,
       'IMAGEURL': instance.imageUrl,
